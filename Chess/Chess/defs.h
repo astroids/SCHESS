@@ -3,9 +3,32 @@
 
 typedef unsigned long long U64;
 
+#include <stdlib.h>
+
+#define DEBUG
+
+#ifndef DEBUG
+#define ASSERT(n)
+#else
+#define ASSERT(n)\
+	if(!(n)){\
+	printf("%s -Failed",#n);\
+	printf("On %s ",__DATE__);\
+	printf("At %s",__TIME__);\
+	printf("In File %s",__FILE__);\
+	printf("At Line %d\n",__LINE__);\
+	exit(1);\
+	}
+
+#endif
+
+
+
+
+
+
 #define NAME "Vice 1.0"
 #define BRD_SQ_NUM 120
-
 #define MAXGAMEMOVES 2048
 
 enum 
@@ -90,11 +113,18 @@ typedef struct{
 
 	S_UNDO history[MAXGAMEMOVES];
 
+	// first is piece type  second how many and where like  whiteKnight #2 is on b1 
+	int pList[13][10];
+	
+
+
 } S_BOARD;
 
 /* MACROS */
 
 #define FR2SQ(f,r) ( (21 + (f) ) + ( (r) * 10) )
+#define SQ64(sq120) Sq120ToSq64[sq120]
+
 
 /* GLOBALS*/
 
@@ -103,6 +133,10 @@ extern int Sq64ToSq120[64];
 
 
 /* FUNCTIONS*/
+//init
 extern void AllInit();
+//bitboards
+extern void PrintBitBoard(U64 bb);
+
 
 #endif
