@@ -4,6 +4,7 @@
 typedef unsigned long long U64;
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #define DEBUG
 
@@ -99,9 +100,9 @@ typedef struct{
 
 	int hisPly;
 
-	int castle;
+	int castlePerm;
 
-	U64 posKey;
+	U64 posKey;//hash key Position on the board
 
 	int pceNum[13];
 
@@ -118,18 +119,35 @@ typedef struct{
 	
 
 
-} S_BOARD;
+}S_BOARD;
 
 /* MACROS */
 
 #define FR2SQ(f,r) ( (21 + (f) ) + ( (r) * 10) )
 #define SQ64(sq120) Sq120ToSq64[sq120]
+#define POP(b) PopBit(b)
+#define CNT(b) CountBits(b)
+//bb and setmask[sq]
+#define CLRBIT(bb,sq) ((bb)&=ClearMask[(sq)])
+//bb or setmask[sq]
+#define SETBIT(bb,sq) ((bb)|= SetMask[(sq)])
+
+
+
+
 
 
 /* GLOBALS*/
 
 extern int Sq120ToSq64[BRD_SQ_NUM];
 extern int Sq64ToSq120[64];
+extern U64 SetMask[64];
+extern U64 ClearMask[64];
+extern U64 PieceKeys[13][120];
+extern U64 SideKey;
+extern U64 CastleKeys[16];
+
+
 
 
 /* FUNCTIONS*/
@@ -137,6 +155,10 @@ extern int Sq64ToSq120[64];
 extern void AllInit();
 //bitboards
 extern void PrintBitBoard(U64 bb);
+extern int PopBit(U64 * bb);
+extern int CountBits(U64 b);
 
+//hashkeys
+extern U64 GeneratePosKey(const S_BOARD * pos);
 
 #endif
